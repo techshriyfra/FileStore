@@ -123,21 +123,20 @@ class Bot(Client):
         try: await self.send_message(OWNER_ID, text = f"<b><blockquote>🤖 Bᴏᴛ Rᴇsᴛᴀʀᴛᴇᴅ by @Codeflix_Bots</blockquote></b>")
         except: pass
 
-    async def stop(self, *args):
+       async def stop(self, *args):
         await super().stop()
         self.LOGGER(__name__).info("Bot stopped.")
 
     def run(self):
-    """Run the bot."""
-    try:
-        asyncio.run(self.start())  # ✅ Use asyncio.run() instead of loop.run_until_complete()
-    except RuntimeError as e:
-        self.LOGGER(__name__).error(f"Runtime error: {e}")
-    finally:
-        self.LOGGER(__name__).info("Bot is now running. Thanks to @rohit_1888")
+        """Run the bot."""
         try:
-            asyncio.run(self.stop())  # Ensure proper cleanup
-        except RuntimeError:
-            pass
-
-     #@rohit_1888 on Tg
+            asyncio.run(self.start())  # ✅ Correctly starts the bot in an async environment
+            self.LOGGER(__name__).info("Bot is now running. Thanks to @rohit_1888")
+        except RuntimeError as e:
+            self.LOGGER(__name__).error(f"Runtime error: {e}")
+        finally:
+            self.LOGGER(__name__).info("Shutting down bot...")
+            try:
+                asyncio.run(self.stop())  # ✅ Ensures the bot stops cleanly
+            except RuntimeError:
+                pass  # Avoids double event loop errors
